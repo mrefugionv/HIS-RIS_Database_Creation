@@ -1,17 +1,29 @@
-SELECT {agg / classificacion} (col 1 )  {particion} AS name
-FROM table1
-LEFT/ FULL/ RIGHT/ INNER JOIN table2 ON table1.col = table2 .col
-WHERE table#.col {comparacion} table#.col     *no agg
-GROUP BY col
-GAVING {agg} col  {comparacion} value
-ORDER BY col DESC/ASC
-LIMIT #filas
+## SQL
+.....
+Servidor
+Motor SQL
 
-{agg} = MIN , MAX, SUM, DISTINCT, COUNT, AVG
-{classificacion} = RANK, ROW_NUMBER, LAG. LEAD, FIRST VALUE, LAST VALUE
-{paticion}= OVER( PARTITION BY col2
-                ORDER BY  col2
-                ROW BETWEEN <start_bound> AND <end_bound>)
-<baound> = UNBOUNDED PRECEDING/ FOLLOWING, N PRECEDING / FOLLOWING, CURRENT ROW
-{comparcion} =  >, < , >= , <=, ...
- 
+
+## RELACIONES ENTRE TABLAS DE BASE DE DATOS
+Conceptos:
+Clave Primaria
+Cñlave Foránea
+
+Relación 1:1
+Una clave primaria de una tabla se relaciona con una clave primaria de otra tabla.
+Un usuario solo tiene un dni
+* Clave foránea.
+
+Relación 1:n
+Una empresa puede tener varios empleados.
+* Clave foránea.
+
+Relación n:n
+Diferentes programadores saben diferentes lenguajes de programación.
+Entonces cada lenguaje de programación puede estar asociado a diferentes programadores.
+* Tabla de relaciones.
+
+Autorefrenecia
+Relaciones dentro de la misma tabla.
+Tabla de empleados tienen mismo info todos pero tenemos campo de jefe en el que se indica que registro de la misma tabla es el jefe de cada uno de los empleados. 
+
