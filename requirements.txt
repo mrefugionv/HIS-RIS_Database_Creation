@@ -1,0 +1,5 @@
+Package     Version
+----------- -------
+mysql       0.0.3
+mysqlclient 2.2.8
+pip         24.2
