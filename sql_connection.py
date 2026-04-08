@@ -26,7 +26,8 @@ def print_user(user):
 
 
 print_user("Brais")
-#print_user("DELETE TABLE users")
+#print_user("DELETE TABLE users") --el codigo así no puede usarse si fuera "SELECT * FROM users" + users... --- tal vez se podría ehjecutar estas instrucciones peligrosas
+
 
 '''
 SQL injection - cuidado con la concatenación de texto 

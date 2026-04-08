@@ -2,4 +2,5 @@
 /*
 Comentario en varias líneas
 */
+DROP TABLE tabe_name;
 

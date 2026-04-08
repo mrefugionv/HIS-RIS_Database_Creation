@@ -27,6 +27,72 @@ CONCAT :  SELECT CONCAT('Nombre: ', name, ', 'Apellidos: ', surname) AS 'Nombre 
 
 {LOGICOS } = NOT, AND, OR, NOR , IN, BETWEEN
 
+## JOINS
+Para relacionar a combinar los datos que hay en dos tablas
+![alt text](join_types.png)
+
+### INNER
+Obtener las filas comunes de ambas tablas en la columna indicada. 
+
+SELECT * FROM table1
+INNER JOIN table2
+ON table1.col = table2.col ;
+
+SELECT table1.colY , table2.colX ...   FROM table1
+INNER JOIN table2
+ON table1.col = table2.col ;
+
+En tabla relación 1:1, 1 usuario: 1 dni. No se ven datos repetidos en la columna de clave.
+Tabla con relación 1:n , 1 usuario : varias companias. Sí se ven datos repetidos en la relación multiple (company id)
+
+En la mayoría de los motores de bases datos el JOIN trabajo como INNER JOIN:
+ 
+SELECT * FROM table1
+JOIN table2
+ON table1.col = table2.col ;
+
+RELACIONES N:M , tabla intermedia . Join con tres tablas. 
+
+SELECT table1.colX , table2.colY.... FROM table_relacion
+INNER JOIN table1 ON table_relacion.col = table1.col
+INNER JOIN  table2 ON table_relacion.col2 = table2.col2
+
+### LEFT
+Todos los datos de la primera tabla y los de la segunda tabla que coincidan. Ejemplo: a todos los usuarios y su dni lo tengan o no . Rellena con nulos los criterios de busqueda que no tienen información.
+
+SELECT * FROM users
+LEFT JOIN dni
+ON users.user_id = dni.user_id ;
+
+SELECT table1.colX , table2.colY.... FROM table_relacion
+LEFT JOIN table1 ON table_relacion.col = table1.col
+LEFT JOIN  table2 ON table_relacion.col2 = table2.col2;
+
+en otros motores de bases de datos : LEFT OUTER JOIN
+
+### RIGHT
+
+Ahora muestra todos los dni´s y y rellena los user que faltan
+
+SELECT * FROM users
+RIGHT JOIN dni
+ON users.user_id = dni.user_id ;
+
+* Se puede obtener los mismos resultados con RIGHT y LEFT , volteando el orden de las tablas, pero a nivel de tratamiento de datos y compresión es mejor llevar un orden.
+
+### FULL  JOIN
+El comando es UNION
+
+SELECT users.user_id AS u_user_id, dni-user_id AS d_user_id
+FROM users
+LEFT JOIN dni
+ON users.user_id = dni.user_id 
+UNION
+SELECT users.user_id AS user_id, dni.user_id AS d_user_id
+FROM users
+RIGHT JOIN dni
+ON users.user_id = dni.user_id;
+
 
 ## NOT 
 
