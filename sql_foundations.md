@@ -5,6 +5,32 @@ Motor SQL
 
 
 ## RELACIONES ENTRE TABLAS DE BASE DE DATOS
+
+
+Table relationships are associations established between tables in a relational database, used to link data across tables based on common fields. They minimize data redundancy by separating data into subject-based tables, enabling complex queries by connecting related data through primary and foreign keys.
+
+Table relationships are associations established between tables in a relational database, used to link data across tables based on common fields. They minimize data redundancy by separating data into subject-based tables, enabling complex queries by connecting related data through primary and foreign keys. 
+Microsoft Support
+Microsoft Support
+ +2
+Types of Table Relationships
+One-to-Many (1:N): The most common type. A single record in Table A can relate to multiple records in Table B. Example: One customer (1) places many orders (N).
+Many-to-Many (M:N): Records in both tables link to multiple records in each other, usually requiring a "junction" or "pivot" table to work. Example: Products can be in many orders, and orders can contain many products.
+One-to-One (1:1): Each record in Table A corresponds to only one record in Table B. Often used for splitting data into smaller tables for security or efficiency. 
+
+AUTOREFERENCIAL :
+
+
+Metabase
+Metabase
+ +3
+Key Concepts in Relationships
+Primary Key: A unique identifier for each row in a table.
+Foreign Key: A field in one table that links to the primary key of another table, creating the connection.
+Referential Integrity: Ensures that relationships between tables remain valid, preventing invalid data (e.g., ensuring a "many" record cannot be created without a valid "one" parent record)
+
+![Table Relationships Types](table_relationships.png)
+
 Conceptos:
 Clave Primaria
 Cñlave Foránea

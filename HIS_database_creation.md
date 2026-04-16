@@ -1,42 +1,65 @@
-## 1. Descarga de SQLServer
-  a)  MySQL Community (GPL) Downloads » MySQL Community Server - esto es la base de datos
-  b) MySQL Installer Windows download” - mysql-installer-community-8.0.45.0.msi (556 MB)
-  c) Configurar contraseña
-  d) Crear y validar que tenemos nuestra base de datos corriendo en MySQL 8.0 Command Line Client:
+
+# HIS - RIS DATABASE (DB) CREATION 
+
+[[_TOC_]]
+
+## 1. DOWNLOAD SQL SERVER
+
+MySQL Server is a open-source relational database management system (RDBMS) program that stores, manages, and retrieves data for applications.
+
+An RDBMS (Relational Database Management System) is a type of software application that allows users to create, manage, and manipulate relational databases, which store data in a structured, tabular format (rows and columns). 
+A Database Engine (or DB Motor/Storage Engine) is the underlying core component within a DBMS or RDBMS that specifically handles the task of actually writing, reading, updating, and deleting data on the physical disk or in memory.
+
+RDBMS = DB Engine + administration + services + relational structure + user and permission management
+
+  a) [MySQL Community (GPL) Downloads](https://dev.mysql.com/downloads/)
+  b) MySQL Community Server 
+  c) MySQL Installer Windows download - mysql-installer-community-8.0.45.0.msi (556 MB)
+  d) Password configuration.
+  e) Create the DB in MySQL 8.0 Command Line Client and validate it is running: 
+    ```
        CREATE DATABASE his_database; 
        SHOW DATABASES;   -- lista que bases de datos tenemos
        USE his_database; -- Ahora todo lo que haga sera dentro de esta base de datos
        exit
+    ```
 ![HIS_database creation in SQL Server by SQL Command Line ](sql_command_line.png)
 
-## 2. Descarga de Database Management System DBMS , tambien llamado motor de base de datos. En este caso,  SQL Workbench.
+## 2. DOWNLOAD MYSQL WORKBENCH
 
-## 3. Creación de nueva conneción
-![Pantalla inicial de SQL Workbench y ventana que se abre al añadir conexión](db_creation.png)
-   a) Dar nombre a conexión : HIS Simulation
-   b) Hostname  es la IP , en este caso locla: 127.0.0.1
-   c) Puerto 3306
-   d) Username - root
-   e) Dar nombre a Schema (Database): his_database
+MySQL Workbench is a unified graphical user interface (GUI) tool for database architects, developers, and administrators to design, manage, and query MySQL databases.
 
-## 4. Creación de tablas
-Segun el esquema propuesto en  [ ris-pacs-foundations/5_ris-pacs_integration.md] (https://github.com/mrefugionv/ris-pacs-foundations/blob/main/5_ris-pacs_integration.md)
-[Descrito en](https://github.com/mrefugionv/ris-pacs-foundations/blob/main/5_ris-pacs_integration_ERdiagram.py)
+SQL Server = the car's engine
+Workbench = the dashboard and steering wheel for driving it
 
-Hay dos maneras de crear tablas:
-a) A traves de la interfaz gráfica.
-    Click derecho sobre "Tablas" en el Navegador de Schemas.
-    Create Table
-    En la ventana que se abre:
-    a) Indicar nombre de la tabla
-    b) Columnas - nombre, tipo de dato [SQL data types documentation] (https://www.w3schools.com/sql/sql_datatypes.asp)
-    ,  y si es PK, NN, UQ, B, UN, ZF, AI, G ,  Características explicadas en 
-    [sql_database_modification_commands.sql]()
-    Default Expresión, valor por defecto en caso de que no se agregue valor.
+## 3. CREATE CONECTION TO DB 
+
+a) Set the conection´s name : HIS Simulation
+b) Set the IP in "Hostname". In thi case, the local IP: 127.0.0.1
+c) Set port: 3306
+d) Set Username:  root
+e) Set the Schema´s name (Schema = Database): his_database
+
+![SQL Workbench home screen and the window that opens when adding a connection](db_creation.png)
+
+## 4. CREATE TABLES
+
+Now we can star creating the tables according to the proposed schema in [ ris-pacs-foundations/5_ris-pacs_integration.md] (https://github.com/mrefugionv/ris-pacs-foundations/blob/main/5_ris-pacs_integration.md)
+
+There are two ways to create tables:
+1) Trough GUI / graphical user interface:
+    1.1 Right-click on “Tables” in the Schema Browser >> "Create Table" 
+    1.2 Configure table on the opened window:
+        a) Table Name  in snake_case
+        b) Configure columns:
+            * Name
+            * Data type - [SQL data types documentation](https://www.w3schools.com/sql/sql_datatypes.asp)
+            * Characteristics (PK / NN / UQ / B / UN / ZF / AI / G), describe on: [sql_database_modification_commands.sql]()
+            * Default Expression 
 
     ![Creating "patients" table.](table_creation_window.png)
 
-b) A traves de commandos. Explicados en  [sql_database_modification_commands.sql]()
+2) Through commands. Explained on: [sql_database_modification_commands.sql]()
 
 ```
 CREATE TABLE `his_database`.`patients` (
@@ -55,150 +78,175 @@ CREATE TABLE `his_database`.`patients` (
   UNIQUE INDEX `medical_record_number_UNIQUE` (`medical_record_number` ASC) VISIBLE);
 ```
 
+### 5. CREATE CONSTRAINTS
 
-### 5. Indicar constraints 
-https://www.w3schools.com/sql/sql_check.asp
+SQL constraints are a set of rules applied to table columns to limit the type of data that can be entered. They ensure the accuracy, reliability, and integrity of the database by automatically rejecting any operation that violates these rules.
 
-Operadores SQL:
-=, <>, >, <
-IN (...)
-LIKE
-REGEXP
-BETWEEN
-Funciones:
-LENGTH()
-LOWER()
-UPPER()
-https://www.w3schools.com/sql/sql_wildcards.asp
+Constraints are usually expressed by CHECK() functions [Consult](https://www.w3schools.com/sql/sql_check.asp); in partnership with operators such as:  
+* Logic operators: =, <>, >, <
+* IN (...)
+* LIKE
+* REGEXP
+* BETWEEN
 
-###  Checar formato
-.ej. checar que contacto siempre tenga fomrato de email, en query , alterar tabla y agregar un constraint
-[REGEXP Regular Expresion Documentation](https://www.geeksforgeeks.org/mysql/mysql-regular-expressions-regexp/)
+The operators compare values that can be expressed, among others, as:
+* LENGTH()
+* LOWER()
+* UPPER()
+* String SQL Wildcards
+
+####  FORMAT CONSTRAINT CREATION
+
+In this example, a constraint for checking email format in contact_info column is added to patients table.  This type of constreaints are achieved by comparing them with regular expressions [(REGEXP)](https://www.geeksforgeeks.org/mysql/mysql-regular-expressions-regexp/) defined using specific characters [( SQL wildcards)] (https://www.w3schools.com/sql/sql_wildcards.asp). 
 
 ```
 ALTER TABLE patients
 ADD CONSTRAINT chk_email
 CHECK (contact_info REGEXP '^[^@]+@[^@]+\\.[^@]+$');
-
 ```
-y checar que se haya guardado correctamente
+![Adding email format constraint.](adding_constraint.png)
+
+Then check that te constraint was added correctly by consulting the current table configuration, writting the next query: 
 
 ```
 SHOW CREATE TABLE patients;
 ```
-![Adding email format constraint.](adding_constraint.png)
 
-#### permitir solo ciertis valores - 
-para mantener orden 
-Tambien se puede cambiar nombre si se nota que alguno es palabra reseervada o restringida (Se pinta en azul)
+#### CERTAIN VALUES CONSTRAINT - MODIFYING COLUMN NAME 
+
+This example shows two qualities:
+1. The column name is changed to avoid confusion with a reserved or restricted word in the SQL language. You can identify these words because the language highlights reserved words in blue.
+2. A constraint is created so that only certain defined values can be entered in the patient_status column: active, inactive, or deceased.
 
 ```
 ALTER TABLE patients
 CHANGE status patient_status VARCHAR(15)
 CHECK(patient_status IN ('active', 'inactive', 'deceased'));
 ```
-#### SE guarde la fecha y hora del sistema
 
-DATETIME	Guarda la fecha tal cual
-TIMESTAMP	Se ajusta a zona horaria
+### 6. MODIFYING TABLE -  ADDING DATETIME DEFAULT VALUES 
 
-👉 En sistemas reales:
+If we forgot to specify a certain property when creating a table, we can modify it using the ALTER TABLE command. In this case, we’re modifying the table to add a default value to the `report_datetime` column, which is set to the current system time in timestamp format.
 
-TIMESTAMP → logs, auditoría
-DATETIME → fechas clínicas (no quieres que cambien)
+For date-type data, there are two common formats:
+datetime () - Stores the date as-is. These are used for clinical dates (which are not required to change).
+
+For date-type data, there are two common formats:
+* datetime() - Stores the date as-is. These are used for clinical dates (which are not expected to change).
+* timestamp() - Can be adjusted according to time zone. These are used in audit tables, such as log tables.
 
 ```
 ALTER TABLE report 
 MODIFY report_datetime DATETIME DEFAULT CURRENT_TIMESTAMP;
 ```
 
+### 6. CREATE TABLE RELATIONSHIPS 
 
-### 6. Creación de relaciones entre tablas - sql_database_modification_commands.sql
-1:1 Study -report, 1 paciente 1 doctor de cabecera , 1 orden 1 estudio
+For conceptual explanation visit [sql_foundations.md](sql_foundations.md)
+
+#### 1: 1
+
+Examples in this HIS DB:
+* 1 study_id : 1 report_id
+* 1 patient_id : 1 primary_physician
+* 1 order_requet_id : 1 study_id
+
+Commands explanation: 
+* ADD CONSTRAINT →  adding a constraint
+* fk_patient_physician → contraint´s name. The common format is by naming after the two fields being related: fk_column1_column2
+* FOREIGN KEY (primary_physician_id) → local column
+* REFERENCES physicians(physician_id) → the table (column) it references
 
 ```
-ALTER TABLE  patients
-ADD CONSTRAINT fk_patient_physician
-FOREIGN KEY (primary_physician_id) REFERENCES physicians (physician_id);
-
 ALTER TABLE  reports
 ADD CONSTRAINT fk_report_study
 FOREIGN KEY (study_id) REFERENCES studies(study_id);
-
-ALTER TABLE  studies
-ADD CONSTRAINT fk_study_request
-FOREIGN KEY (request_id) REFERENCES order_requests(request_id);
-
 ```
-ADD CONSTRAINT → estás agregando una regla
-fk_patient_physician → nombre (puedes elegirlo- usualmente nombre de las tablas relacionadaS)
-FOREIGN KEY (primary_physician_id) → columna local
-REFERENCES physicians(physician_id) → a dónde apunta  tabla(columna)
+
+#### 1:N
+
+Example: 
+* 1 physician : many order request.
+
+Commands explanation (same as 1:1 relationships): 
+* ADD CONSTRAINT →  adding a constraint
+* fk_patient_physician → contraint´s name. The common format is by naming after the two fields being related: fk_column1_column2
+* FOREIGN KEY (primary_physician_id) → local column
+* REFERENCES physicians(physician_id) → the table (column) it references
 
 
-1:n un physician - varios order request.
 ```
 ALTER TABLE  order_requests
 ADD CONSTRAINT fk_order_physician
 FOREIGN KEY (ordering_physician_id) REFERENCES physicians(physician_id);
 ```
 
+#### N:M
 
-n:m  
-ordering physician - ordenes -> studio, 
- technician - scheduled apointments -> studio
+Examples: 
+* many ordering_physician : many  request_orders 
+* many performing_technicians : many scheduled_appointments 
 
 ```
-CREATE TABLE orders_physicians (
-    request_id INT,
-    physician_id INT,
-
-    PRIMARY KEY (request_id, physician_id),
-
-    FOREIGN KEY (request_id) REFERENCES order_requests(request_id),
-    FOREIGN KEY (physician_id) REFERENCES physicians(physician_id)
-);
-
 CREATE TABLE appointments_technicians (
     appointment_id INT,
     performing_technician_id INT,
 
     PRIMARY KEY (appointment_id, performing_technician_id),
-
     FOREIGN KEY (appointment_id) REFERENCES scheduled_appointments(appointment_id),
     FOREIGN KEY (performing_technician_id) REFERENCES physicians(physician_id)
 );
+```
 
- ALTER TABLE studies
-ADD CONSTRAINT fk_study_physician
-FOREIGN KEY (ordering_physician_id) REFERENCES order_requests(ordering_physician_id);
+So the tables that reference any of these columns are linked to the intermediate table
+studies(performing_technician).
 
+```
 ALTER TABLE studies
 ADD CONSTRAINT fk_study_technician
 FOREIGN KEY (performing_technician_id) REFERENCES scheduled_appointments(performing_technician_id);
 ```
 
-AUTOREFRENCIAL
-*crear base el MRN medical record nomber con una regla desde patiente id: ej EMD= HOSP(codigo hospital)-2026 (año)-paient_id
+### SELF-REFERENTIAL: MEDICAL RECORD NUMBER (MRN) GENERATION
+
+Systems often have an auto-incrementing ID from the internal database (patient_id), which may change during migrations, and a patient identification number, also known as a Medical Record Number (MRN), which is used by healthcare providers for record management and reporting. It must be stable and meaningful. 
+
+In this case, we will auto-generate a unique MRN based on the patient_id, adding additional information such as the Mexican state, the year, and the identifier of the hospital where the patient was registered.
+
+EMD= QRO-HOSP(codigo hospital)-2026(año)-paient_id.
+Si patient_id = 7  entonces  MRN = QRO-HOSP01-2026-000007
+
+```
+DELIMITER $$
+
+CREATE TRIGGER trg_generate_mrn
+AFTER INSERT ON patients
+FOR EACH ROW
+BEGIN
+    UPDATE patients
+    SET medical_record_number = CONCAT(
+        'QRO-',
+        'HOSP01-',
+        YEAR(CURDATE()),
+        '-',
+        LPAD(NEW.patient_id, 6, '0')
+    )
+    WHERE patient_id = NEW.patient_id;
+END$$
+
+DELIMITER ;
+```
+
+#### CASCADE INFORMATION REMOVAL
 
 
+The use of these clauses is governed by the data integrity policy, which addresses questions such as:
+What is considered “dependent”?
+What can actually be deleted?
 
-#### si se elimina alguna relación se elimina la info asociada?
-ejemplo si se elimina un paciente se eliminan sus estudios? si se elimina algun estudio se elimina su reporte?
-
-política de integridad de datos
-
-Esto responde preguntas como:
-
-¿qué se considera “dependiente”?
-¿qué se puede borrar realmente?
-
-CASCADE
-SET NULL
-RESTRICT / NOT ACTION
-
-En este caso hare lo siguiente:
-1. si elimino paciente , NO elimino sus estudios.
+In our case, the following applies:
+1. If a patient is deleted, the associated studies are NOT deleted.
+2. If a study is deleted, the associated report is also deleted. 
 
 ```
 ALTER TABLE studies
@@ -210,7 +258,7 @@ FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 ON DELETE SET NULL;
 
 ```
-2. si elimino un estudio, SÍ elimino su reporte.
+
 ```
 ALTER TABLE reports
 DROP FOREIGN KEY fk_report_study;
@@ -221,41 +269,57 @@ FOREIGN KEY (study_id) REFERENCES studies(study_id)
 ON DELETE CASCADE;
 ```
 
-## 7. Triggers
-a tabla log cada update/alter table
+## 7. TRIGGERS
 
-scheduled appointment - cuando se asigne hora , cambiar en tabla order request el status a scheduled. 
-Cuando cambie en report a final, que cambie en order request status a completed 
+An SQL trigger is a specialized stored procedure that executes automatically in response to specific events on a table or view. They are primarily used to maintain data integrity, enforce business rules, and automate audit logging without requiring manual intervention or external application logic.
 
-Para las tablas criticas: paciente, estudio, reporte- queremos guardar cuando haya algun cambio en la tabla de audit_log. tiente los siguientes campos:
-* log_id (ya esta predeterminado a autoincrement). 
-* user_id -  @current_user_id
-*action - si fue delete/update/insert 
-*entityt type - el nombre de la tabla 
-* entity_id - la clave primaria de la tabla que fue modificada 
-*datetime - ya esta determinado el default current timestamp 
-*previous value - 
-*new value
 
-En el campo de user se suele tomar del sistema, ahora lo vamos a setear cada ingreso de conexión: 
+### AUDIT LOG
+
+For critical tables (patients / studies / reports), we want to store important information for tracking changes during audits. 
+The audit_log table contains the following fields:
+* log_id - set to auto-increment by default. 
+* user_id - @current_user_id; this is the user who logged into the system. It is set with each login.
 ´´´
 SET @current_user_id = 5;
-
-UPDATE patients SET name = 'Maria R' WHERE patient_id = 1;
-UPDATE patients SET email = 'nuevo@email.com' WHERE patient_id = 1;
 ´´´
+* action - whether it was delete/update/insert 
+* entity_type - the name of the table (patients / studies / reports)
+* entity_id - the primary key of the table record that was modified 
+* datetime - defaulted to the current timestamp 
+* previous value - previous value of the modified field (delete/update), null for (insert).
+* new value - new value of the modified field (insert/update), null for (delete).
 
-´´´
-SHOW CREATED TABLE nombretabla;
-´´´
-Ayuda a ver como esta codificada la tabla 
+The conditions for the values to be stored in the log table were as follows:
+1. When the action is an insert, the auto-incrementing identifiers from the relevant table are stored (patients - patient_id, studies - study_id, reports - report_id).
+2. When the action is an update, the identifiers of the modified record (id) are saved, along with only the updated field, determined by a comparison [IF NOT (OLD.first_name <=> NEW.first_name)]. 
+* Note: For TEXT data types, such as the findings_text field in the reports table, only fragments of the text are saved if there is sufficient contextual information, to avoid using too much memory. Some options are: 
+   a) Save the first characters - LEFT(OLD.report_text, 200)
+   b) Save the last characters - RIGHT(OLD.report_text, 200)
+   c) Save the beginning and end - 
+   ```
+   CONCAT(
+  ‘start:’, LEFT(OLD.report_text, 100),
+  ‘ | end:’, RIGHT(OLD.report_text, 100)
+   )
+   ```
+   d) Perform more complex comparisons to extract exactly what has changed.
+In our case, it is considered that in a medical report:
+  *  The beginning of the text usually contains more context (header, diagnosis, introduction).
+  * If you always save the beginning, all logs have a comparable format. This maintains consistency and avoids noise at the end (signatures, repeated notes, less relevant information).
 
+```
+CONCAT('report_text:', LEFT(OLD.report_text, 200)),
+CONCAT('report_text:', LEFT(NEW.report_text, 200))
 
-En l
-1. Añadan se guarda el id 
-        Pacientes - patient id
-        Estudios - study _id
-        Reportes - report_id 
+```
+
+3. When the action is a delete, the identifiers of the modified record (ID) and the most relevant information are saved. In our case, this will be as follows:
+    * Patients - patient ID + first name + last name + date of birth (DOB); this allows us to identify unique individuals.
+    * Studies - study_id + patient_id + study_datetime; this tells us who the study was performed on and when.
+    * Reports - report_id + study_id + physician_id (radiologists); to know who interpreted a specific study and what results they reported finding.
+
+#### INSERT
 
 ´´´     
 DELIMITER $$
@@ -280,9 +344,7 @@ BEGIN
     );
 END$$
 ´´´
-
-2. cuando actualicen - id + solo el campo cambio actualizado, 
-mediante comparaciones
+#### UPDATE 
 
 ´´´
 DELIMITER $$
@@ -292,7 +354,6 @@ AFTER UPDATE ON patients
 FOR EACH ROW
 BEGIN
 
-    -- Cambio en nombre
     IF NOT (OLD.first_name <=> NEW.first_name) 
        OR NOT (OLD.last_name <=> NEW.last_name) THEN
 
@@ -433,126 +494,7 @@ END$$
 DELIMITER ;
 ´´´
 
-#### STUDIES - algunos campos se bloquean para no modificarse
-
-´´´
-DELIMITER $$
-
-CREATE TRIGGER trg_studies_update
-AFTER UPDATE ON studies
-FOR EACH ROW
-BEGIN
-
-    IF NOT (OLD.study_datetime <=> NEW.study_datetime) THEN
-        INSERT INTO audit_log (
-            user_id,
-            log_action,
-            entity_type,
-            entity_id,
-            previous_value,
-            new_value
-        )
-        VALUES (
-            @current_user_id,
-            'update',
-            'study',
-            NEW.patient_id,
-            CONCAT( 'study_datetime:', OLD.study_datetime),
-        );
-    END IF;
-    
-    IF NOT (OLD.modality_id <=> NEW.modality_id) THEN
-    INSERT INTO audit_log (
-            user_id,
-            log_action,
-            entity_type,
-            entity_id,
-            previous_value,
-            new_value
-        )
-    VALUES (
-        @current_user_id,
-        'update',
-        'study',
-        NEW.patient_id,
-        CONCAT('DOB:', OLD.modality_id),
-        CONCAT('DOB:', NEW.modality_id)
-        );
-        END IF;
-	
-    IF NOT (OLD.body_part <=> NEW.body_part) THEN
-    INSERT INTO audit_log(
-            user_id,
-            log_action,
-            entity_type,
-            entity_id,
-            previous_value,
-            new_value
-            )
-	VALUES (
-	        @current_user_id,
-            'update',
-            'study',
-            NEW.patient_id,
-            CONCAT ('body_part:',OLD.body_part),
-            CONCAT ('body_part:', NEW.body_part)
-    );
-    END IF;
-    
-    IF NOT (OLD.study_status <=> NEW.study_status) THEN
-    INSERT INTO audit_log(
-            user_id,
-            log_action,
-            entity_type,
-            entity_id,
-            previous_value,
-            new_value
-            )
-	VALUES (
-	        @current_user_id,
-            'update',
-            'study',
-            NEW.patient_id,
-            CONCAT ('study_status:',OLD.study_status),
-            CONCAT ('study_status:', NEW.study_status)
-    );
-    END IF;
-    
-    IF NOT (OLD.performing_technician_id <=> NEW.performing_technician_id) THEN
-    INSERT INTO audit_log(
-            user_id,
-            log_action,
-            entity_type,
-            entity_id,
-            previous_value,
-            new_value
-            )
-	VALUES (
-	        @current_user_id,
-            'update',
-            'study',
-            NEW.patient_id,
-            CONCAT ('performing_technician_id:',OLD.performing_technician_id),
-            CONCAT ('performing_technician_id:', NEW.performing_technician_id)
-    );
-    END IF;
-    
-
-END$$
-
-DELIMITER ;
-´´´ 
-#### REPORTS
-¿como se hace para logs de texto largo ?  
-´´´ 
-
-´´´ 
-
-3. cuando eliminen - el id e info importante 
-        Pacientes - patient id + first name + last name + fecha nacimiento (DOB)
-        Estudios - study _id + patient_id + study datetime 
-        Reportes - report_id + study_id + physician _id (radiologits)
-
+#### DELETE
 ´´´
 DELIMITER $$
 
@@ -575,8 +517,17 @@ BEGIN
         CONCAT('name:', OLD.first_name, '', OLD.last_name, 'DOB', OLD.date_of_birth)
     );
 END$$
-
 ´´´
+### NO OVERLAPING SCHEDULING 
+
+
+### STATUS CHANGE 
+
+
+scheduled appointment - cuando se asigne hora , cambiar en tabla order request el status a scheduled. 
+Cuando cambie en report a final, que cambie en order request status a completed 
+
+
 ## 7. Hacer conexión desde python - sql_connection.py
 
 ## 8. Crear y traer registros  - Se pueden usar los comandosde sql_query_commands.sql

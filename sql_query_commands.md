@@ -1,6 +1,6 @@
 # SQL STATEMENTS DE CONSULTA
 
-
+```
 SELECT {agg / classificacion} (col 1 )  {particion} AS 'new_col_name'
 FROM table1
 LEFT/ FULL/ RIGHT/ INNER JOIN table2 ON table1.col = table2 .col
@@ -9,6 +9,8 @@ GROUP BY col  ** solo con agg
 HAVING {agg} col  {comparacion} value {logico} {comparacion} value 
 ORDER BY col DESC/ASC
 LIMIT #filas ; 
+
+```
 
 {agg} = MIN , MAX, 
 CONCAT :  SELECT CONCAT('Nombre: ', name, ', 'Apellidos: ', surname) AS 'Nombre Completo' FROM users;
