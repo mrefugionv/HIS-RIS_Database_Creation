@@ -4,6 +4,78 @@ insertar registros
 
 INSERT INTO table_name ('colx_name', 'coly_name', ...) VALUES ('value_colx' 'value_coly'...)
 
+´´´
+INSERT INTO physicians (
+physician_name,
+date_of_birth,
+speciality,
+license_number,
+contact_info,
+room,
+physician_status)
+VALUES (
+'MIRANDA VILLANUEVA ESPARZA',
+'1978-12-04',
+'General',
+'DC-89-MX-2006',
+'mirvillanueva@hosp.org.mx.com',
+'Private_ERoom_5',
+'active');
+´´´
+´´´
+
+INSERT INTO patients (
+first_name,
+last_name,
+date_of_birth,
+gender,
+contact_info,
+primary_physician_id,
+insurance_id,
+patient_status)
+VALUES (
+'JUAN',
+'CORONA VILLA',
+'1967-08-16',
+'Male',
+'juancoronav@gmail.com',
+2,
+4678997,
+'active');
+
+SELECT * FROM patients;
+
+´´´
+
+```
+INSERT INTO modalities (
+modality_type,
+ae_title,
+ip_address,
+modality_port,
+location,
+manufacturer
+)
+VALUES
+('CT', 'CT_QRO_01', '192.168.1.50', 104, 'Sala 1', 'Siemens'),
+('MG', 'MG_QRO_04', '192.168.1.49', 104, 'Sala 5', 'Cannon'),
+('MR', 'MR_QRO_01', '192.168.1.51', 104, 'Sala 2', 'GE'),
+('US', 'US_QRO_01', '192.168.1.52', 104, 'Sala 3', 'Philips');
+
+
+```
+A port is like a “logic gate” in a machine:
+
+IP → identifies the device
+Port → identifies the service on that device
+
+Standard ports (by convention)
+Service    Port
+* HTTP    80
+* HTTPS    443
+* DICOM    104
+Not mandatory, but standard
+
 ## UPDATE 
 Actualizar registros
 SIEMPRE PONER FILTRADO (WHERE) *** o todos los registros del campo se cambiaran 
@@ -17,6 +89,7 @@ SIEMPRE PONER FILTRADO (WHERE) *** o todos los registros se borran
 
 DELETE FROM users WHERE user_id = 11;
 
+DELETE FROM physicians WHERE physician_id=1;
 
 # TABLE LEVEL
 

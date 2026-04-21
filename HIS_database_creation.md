@@ -236,6 +236,26 @@ END$$
 
 DELIMITER ;
 ```
+Your trigger is set to AFTER INSERT; first, verify that all required fields have a value before inserting. Then, we assign a temporary null value to `medical_record_number` so that the trigger fires.
+
+```
+ALTER TABLE patients
+MODIFY medical_record_number VARCHAR(50) NULL;
+```
+
+It does NOT work; it generates error 1442. This will be done using Python:
+1. Insert patient
+2. Get ID
+3. Generate MRN 
+4. Update patient
+
+Conclusion:
+Use triggers ONLY for auditing (audit_log) and validations
+Use Python for business logic (MRN, calendar, etc.)
+
+```
+DROP TRIGGER trg_generate_mrn; 
+```
 
 #### CASCADE INFORMATION REMOVAL
 
@@ -338,7 +358,7 @@ BEGIN
     VALUES (
         @current_user_id,
         'insert',
-        'patients',
+        'patient',
         NEW.patient_id,
         CONCAT('patient_id:', NEW.patient_id)
     );
@@ -520,16 +540,126 @@ END$$
 ´´´
 ### NO OVERLAPING SCHEDULING 
 
+To ensure seamless scheduling, the following is consider:
+1. Trigger to avoid overlaps with appointments already scheduled for that same medical imaging equipment (before inserting or modifying the scheduling)
+new_start < existing_end and new_end > existing_start
+2. Ensure that new_start < new_end  
+
+´´´
+DELIMITER $$
+
+CREATE TRIGGER no_overlaped_appointments_insert
+BEFORE INSERT ON scheduled_appointments
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM citas
+        WHERE equipment_id = NEW.equipment_id 
+        AND (
+            NEW.scheduled_start < scheduled_end
+            AND NEW.scheduled_end > scheduled_start
+        )
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Error: OVERLAPING APPOINTMENT FOR THE EQUIPEMENT';
+    END IF;
+END$$
+
+DELIMITER ;
+
+´´´
+´´´
+ALTER TABLE scheduled_appointments
+ADD CONSTRAINT chk_start_ending_time
+CHECK (scheduled_start < schedeuled_end)
+´´´
+#### TRIGGER VS CONSTRAINT
+
+CONSTRAINT:
+* Declarative (fixed rule)
+* Resides in the table
+* MySQL evaluates it automatically
+* Does not involve complex logic
+* Cannot use queries on other rows
+* Validates only that specific record
+
+TRIGGER
+* Procedural (logic)
+* Runs before/after INSERT/UPDATE
+* Can query other rows
+* Can throw custom errors
 
 ### STATUS CHANGE 
 
+* When a time is assigned in `scheduled_appointment`, change the status in the `order_request` table to “scheduled”.
+* When the status in `report` changes to “final”, change the status in `order_request` to “completed”.
+* If the study_status changes to `canceled`,  change the status in `order_request` to “canceled”.
 
-scheduled appointment - cuando se asigne hora , cambiar en tabla order request el status a scheduled. 
-Cuando cambie en report a final, que cambie en order request status a completed 
+´´´
+DELIMITER $$
+
+CREATE TRIGGER status_request_scheduled
+AFTER INSERT ON scheduled_appointments
+FOR EACH ROW
+BEGIN
+    UPDATE order_requests
+    SET request_status = 'booked'
+    WHERE request_id = NEW.request_id;
+END$$
+
+DELIMITER ;
+´´´
+´´´
+
+DELIMITER $$
+
+CREATE TRIGGER if_report_final_request_completed
+AFTER UPDATE ON reports
+FOR EACH ROW
+BEGIN
+    IF NEW.report_status = 'final' 
+       AND OLD.report_status <> 'final' THEN
+        
+        UPDATE order_requests
+        SET request_status = 'completed'
+        WHERE study_id = NEW.study_id;
+    END IF;
+END$$
+
+DELIMITER ;
+´´´
+
+´´´
+DELIMITER $$
+
+CREATE TRIGGER if_study_canceled_request_canceled
+AFTER UPDATE ON studies
+FOR EACH ROW
+BEGIN
+    IF NEW.study_status = 'canceled' 
+       AND OLD.study_status <> 'canceled' THEN
+        
+        UPDATE order_requests
+        SET request_status = 'canceled'
+        WHERE request_id = NEW.request_id
+        AND request_status <> 'completed';  -- optional, to avoid overwriting final states
+        
+    END IF;
+END$$
+
+DELIMITER ;
+
+´´´
+
+## 7. CONNECT TO DB FROM PYTHON
+Foundations in [sql_connection.py](sql_connection.py)
+![Result after running example in sql_connection.py file](sql_connection.png)
 
 
-## 7. Hacer conexión desde python - sql_connection.py
+Applied on `RIS-PACS Implementation`, documents: his_inteface.py , ris_interface.py
 
-## 8. Crear y traer registros  - Se pueden usar los comandosde sql_query_commands.sql
+## 8. CALL AND CREATE REGISTERS
+Foundation in  [sql_query_commands.sql](sql_query_commands.sql)
+Applied on `RIS-PACS Implementation`, documents: his_inteface.py , ris_interface.py
 
 
