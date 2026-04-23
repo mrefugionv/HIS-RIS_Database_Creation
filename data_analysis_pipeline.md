@@ -1,61 +1,105 @@
-# EDA - Analisis exploratorio
-- ¿que campos tengo?
-- ¿que tipo de datos tengo? (char, str, int, float, datetime, list, )
-- ¿son coherentes con la información que tengo? (ex. id-str,no operaciones matematica, o edad en entero no float)
-- ¿Todos estan standarizados (mismo formato en títulos de campos y registros)? - ex. str todos mayusculas o minusculas o tipo oración. espacios, guiones bajos, etc...
+# DATA ANALYSIS PIPELINE
 
-# Preporcesamiento
-- ¿hay valores duplicados? - 
-  * Explicitos - Asegurate que sea exactamente el mismo registro en todos los campos (sino tal vez solo sea info parecida del paciente)
-  * Implicitos - En un campo que una misma opción se escriba diferente (hip, hop, hip-hop...)
-- ¿hay valores auscentes? ¿que proporción? ¿los campos en los que hay auscentes son cruciales para la investigación?
-- ¿por que hay esas incosistencias? - entre sistemas 
-- ¿como podemos menejarla información faltante?
-   * No cruciales - rellenar con valor prefdetrminado como 'unknown' o 0.
-   * Afectan - buscar las razones por las cuales hay datos ausentes e intentar recuperarlos.
-* Sort values-  maximo, minimo, 
-* describe - media, mediana, moda, desviacon estandar, min, max
+[[_LOC_]]
 
-# Procesamiento
- * merge tables
- * Pivotaje de tablas
-     pivot_calls = calls.pivot_table (  #Utilizamos tablas dinámicas para agrupar
-index = 'user_id',                 #User id sera el indice que correpoonde a los valores de las filas     
-columns = 'call_month',            # Queremos una columna por cada mes del año
-values = 'id',                     # En cada celda queremos que se coloque el número de llamada que hizo ...
-aggfunc = 'count'                  #... el usuario ese mes por eso contamos el numero de id de llamadas
-)
+## EDA - EXPLORATORY ANALISYS
+- What fields do I have?
+- What data types do I have? (char, str, int, float, datetime, list, )
+- Are they consistent with the information I have? According to:
+    * Needing - e.g. id as string not number because is not used for math operations.
+    * Minimum memory space -  e.g. age integer not a float, decimal will be missused.
+- Are they all standardized? Every field name is in snake_case? Every record has the same format?
+     * uppercase / lowercase / sentence case. 
+     * spaces / underscores
 
- * Agrupación de cohortes -
- * Matriz de correlación 
+# PREPROCESSING
+- Are there any duplicate entries? 
+  * Explicit - Make sure the entry is exactly the same across all fields (otherwise, it may just be similar patient information)
+  * Implicit - In a field where the same option is written differently (hip, hop, hip-hop...)
+- Are there missing values? In which proportion? Are the fields with missing values crucial for the research?
+- Why are there these inconsistencies? 
+     * Between  information systems
+     * Adquiring methods 
+- How can we handle the missing information?
+   * Non-critical - Fill it in with a default value such as ‘unknown’ or 0.
+   * Affected - Investigate the reasons for missing data and attempt to recover it.
+* Sort values - maximum, minimum. 
+* Describe - mean, median, mode, standard deviation, min, max.
 
 
-# Visualización
- * barras
- * histogramas -   Medias , medianas, valores atipicos...
- * lineas
- * scatter /dispersion
- * circulo /pastel
- * heatmaps
+# PROCESSING METHODS
+ * Merge Tables - 
+    - When data is split across multiple tables and you need to combine context
+    - Data is normalized and you need to enrich rows with more attributes
+    - e.g. Patient info in one table and  studies in another
+ * Pivot tables
+    - To reshape data to compare categories side-by-side  (Counts per category)
+    - While building reports or dashboards
+    - rows → columns
+ * Cohort Analysis
+    - To analyze behavior over time grouped by a starting event
+    - When time matters and  evolution, retention, or decay are important parameters (“people drop off after X time”).
+    - For Patient follow-ups or Subscription survival or Treatment evolution
+    - e.g. Group patients by first visit month, then track visits over time
+ * Correlation Matrix
+    - When you want to understand relationships between numerical variables
+    - “When X goes up, does Y go up or down?”
+    - When variables are numeric, relationships wanted not aggregation. 
+    - For: feature selection (ML), understanding drivers, detecting redundancy, exploring data.
+
+## VISUALIZATION
+
+* Bar charts: compare magnitudes across discrete categories (e.g., sales by region).
+* Histograms: examine the distribution of a numerical variable (frequencies, shape, skewness, outliers).
+* Line charts: analyze changes over time or continuous sequences.
+* Scatter plots: explore the relationship between two numerical variables (correlation, patterns, clusters).
+* Pie charts: show proportions of a total when there are few categories.
+* Heatmaps: visualize intensity or patterns in matrix (correlations, cohorts, density by cross-sections).
 
 
+## STATISTICAL HYPOTHESIS TESTING
 
-# Conclusiones - o Pruebas de hipotesis stadísticas 
-  * medias, medianas, 
- * caja bigotes, campana de Gauss..
- * Pruebas estadísticas como -  taylor test, tstudent , levene
+1. Descriptive statistics
+   These are used to understand the distribution of the data before testing hypotheses:
+     - Mean, median: measures of central tendency
+     - Percentiles (e.g., 5%): relative position in the distribution
+     - Outliers: extreme data points that can skew results
+2. Visualizing the distribution
+   They allow us to detect shape, dispersion, and anomalies:
+     -  plot: median, quartiles, outliers
+     - Gaussian bell curve: assumption of normality (key for many tests)
+3. Statistical tests
+   These are used to validate hypotheses with mathematical rigor:
+      - Student’s t-test: comparing means between two groups
+      - Levene’s test: verify equality of variances (homoscedasticity)
+      - Z- test or ANOVA test . 
+      - Taylor test is not standard in this context.
+4. A/B testing
+   Compares two versions (A vs. B) to measure impact:
+     - Based on statistical hypotheses (e.g., difference in means or proportions)
+     - Require sufficient sample size and control of biases
+     - Experiment prioritization:
+         ICE score = (Impact × Confidence) / Effort
+5. Cumulative metrics
+   Used to avoid “peeking” (drawing conclusions prematurely)
+   They allow you to observe the stability of the experiment over time
+6. Business KPIs
+   They connect to strategic decisions:
+      - LTV (Lifetime Value): total value generated by a customer
+      - CAC (Customer Acquisition Cost): cost of acquiring a customer
+      - ROMI: CAC /LTV: Shows whether marketing investments are profitable
+7.  Funnels
+   These are used to analyze conversion step by step:
+      - Example: visits → sign-ups → purchases
+      - They help identify where users are lost
+      - Key to optimization and experimentation (A/B testing)
 
- * KPIS :
-  - LTV Valor del ciclo de vida del cliente
-  - CAC Costo de adquisición de clientes
-  - ROMI = LTV / CAC
-* Pruebas A/B
-  -  ICE = (Impacto * Confinza) / Esfuerzo
-* Embudos
 
-* Matricas acumuladas  - para evitar peeking 
-* Valores atipicos, percentiles 5%
+## MACHINE LEARNING (unsupervised)
+* Clustering: a technique for grouping similar data without prior labels (to discover hidden patterns or segments).
+* Dendrogram: a tree-like representation of hierarchical clustering, showing how groups merge based on their similarity.
+* Used for: Customer segmentation, behavior clustering, exploring data structures. 
 
 
-# Machine learning
- * clustering , dendograma
+## REFERENCES 
+DATA ANALYSIS BOOTCAMP- TRIPLETEN.

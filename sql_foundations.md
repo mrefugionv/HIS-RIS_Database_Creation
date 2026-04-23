@@ -289,7 +289,7 @@ Types of Transactions
 * Explicit: The developer manually defines the boundaries using BEGIN and COMMIT/ROLLBACK.
 * Distributed: Transactions that span across multiple databases or servers while maintaining consistency.
 
-## CONCURRENCIA
+## CONCURRENCY
 
 Concurrency in SQL refers to the ability of a database to process multiple transactions simultaneously. To manage this without corrupting data, databases use concurrency control mechanisms that adhere to the ACID principle, specifically the "Isolation" property. 
 

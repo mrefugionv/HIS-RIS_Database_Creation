@@ -1,73 +1,38 @@
-“Entiendo el análisis de datos como un proceso donde primero se recolecta la información, luego se valida, se procesa, se almacena y finalmente se analiza. En cada etapa pueden surgir inconsistencias, por lo que es importante verificar que los datos sean completos y coherentes, y en caso de error, rastrear en qué punto del flujo ocurrió para corregirlo.”
+# DATA ANALYSIS IN CLINICAL WORKFLOWS
 
-🔹 1. Recolección de datos
+Data analysis is a process in which information is first collected; it is then validated, processed, stored, and finally analyzed. ** Inconsistencies can arise at any stage, so it is important to verify that the data is complete and consistent ** and, if an error occurs, trace it back to the point in the workflow where it originated so that it can be corrected. 
 
-(Ej: sistemas clínicos, modalidad, RIS, PACS)
+1. Data Collection 
+In clinical information systems such as HIS, RIS, or PACS, errors such as the following may occur:
+* Incorrectly selected patient
+* Incomplete data
 
-👉 aquí pueden ocurrir errores como:
+2. Initial Validation
+When entering patients into studies, the MWL worklist is checked to ensure the data does not contain the following errors:
+* Missing data: Is the data complete?
+* No duplicates: Do the identifiers match? 
+* Correct formats: Does the information correspond to the recorded field? 
 
-paciente mal seleccionado
+3. Processing / Transformation
+At this stage, the following occurs in the systems:
+* Data transmission (DICOM)
+* Study-patient association
+The following errors may occur:
+* Incorrect association
+* Loss of information
 
-datos incompletos
+4. Storage (PACS / database)
+Verify that:
+* Has the complete data arrived? - No incomplete studies
+* Are they properly indexed? - No corrupted data
 
-🔹 2. Validación inicial
 
-👉 preguntas clave:
+5. Analysis / visualization
+The following are detected here:
+* Missing images
+* Mismatched data
+* Viewer issues
 
-¿los datos están completos?
 
-¿los identificadores coinciden?
-
-👉 tipos de inconsistencias:
-
-datos faltantes
-
-formatos incorrectos
-
-duplicados
-
-🔹 3. Procesamiento / transformación
-
-👉 lo que pasa en sistemas:
-
-envío de datos (DICOM)
-
-asociación de estudio-paciente
-
-👉 errores posibles:
-
-mala asociación
-
-pérdida de información
-
-🔹 4. Almacenamiento (PACS / base de datos)
-
-👉 validar:
-
-¿los datos llegaron completos?
-
-¿están bien indexados?
-
-👉 errores:
-
-datos corruptos
-
-estudios incompletos
-
-🔹 5. Análisis / visualización
-
-👉 aquí se detecta:
-
-faltan imágenes
-
-datos no coinciden
-
-problemas en visor
-
-🔹 6. Detección de errores y corrección
-
-👉 aquí entra tu pensamiento analítico:
-
-rastrear en qué etapa falló
-
-corregir desde origen si es posible
+6. Error detection and correction
+Identify at which stage the error occurred and correct it at the source, if possible.
