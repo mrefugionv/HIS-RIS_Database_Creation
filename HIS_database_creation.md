@@ -512,10 +512,10 @@ BEGIN
 END$$
 
 DELIMITER ;
-´´´
+```
 
 #### DELETE
-´´´
+```
 DELIMITER $$
 
 CREATE TRIGGER trg_patients_delete
@@ -537,7 +537,7 @@ BEGIN
         CONCAT('name:', OLD.first_name, '', OLD.last_name, 'DOB', OLD.date_of_birth)
     );
 END$$
-´´´
+```
 ### NO OVERLAPING SCHEDULING 
 
 To ensure seamless scheduling, the following is consider:
@@ -545,7 +545,7 @@ To ensure seamless scheduling, the following is consider:
 new_start < existing_end and new_end > existing_start
 2. Ensure that new_start < new_end  
 
-´´´
+```
 DELIMITER $$
 
 CREATE TRIGGER no_overlaped_appointments_insert
@@ -566,13 +566,12 @@ BEGIN
 END$$
 
 DELIMITER ;
-
-´´´
-´´´
+```
+```
 ALTER TABLE scheduled_appointments
 ADD CONSTRAINT chk_start_ending_time
 CHECK (scheduled_start < schedeuled_end)
-´´´
+```
 #### TRIGGER VS CONSTRAINT
 
 CONSTRAINT:
@@ -595,7 +594,7 @@ TRIGGER
 * When the status in `report` changes to “final”, change the status in `order_request` to “completed”.
 * If the study_status changes to `canceled`,  change the status in `order_request` to “canceled”.
 
-´´´
+```
 DELIMITER $$
 
 CREATE TRIGGER status_request_scheduled
@@ -608,8 +607,8 @@ BEGIN
 END$$
 
 DELIMITER ;
-´´´
-´´´
+```
+```
 
 DELIMITER $$
 
@@ -627,9 +626,9 @@ BEGIN
 END$$
 
 DELIMITER ;
-´´´
+```
 
-´´´
+```
 DELIMITER $$
 
 CREATE TRIGGER if_study_canceled_request_canceled
@@ -649,7 +648,7 @@ END$$
 
 DELIMITER ;
 
-´´´
+```
 
 ## 7. CONNECT TO DB FROM PYTHON
 Foundations in [sql_connection.py](sql_connection.py)
